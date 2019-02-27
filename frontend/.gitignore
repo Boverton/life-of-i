@@ -21,3 +21,21 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.DS_Store
+.idea/The life of i.iml
+.idea/encodings.xml
+.idea/jsLibraryMappings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/workspace.xml
+Mockups/
+
+../.DS_Store
+../.idea/The life of i.iml
+../.idea/encodings.xml
+../.idea/jsLibraryMappings.xml
+../.idea/misc.xml
+../.idea/modules.xml
+../.idea/workspace.xml
+../Mockups/
