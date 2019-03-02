@@ -7,7 +7,7 @@ import React from 'react';
  * @param ref
  * @returns {{ref: *, error: *, value: *}}
  */
-export const getInputObject = (value, error, ref) => {
+export const inputObject = (value, error, ref) => {
     value = value || "";
     error = error || "";
     ref = ref || React.createRef();
@@ -24,15 +24,16 @@ export const getInputObject = (value, error, ref) => {
  *
  * @param event
  * @param stateClone
- * @param value
  * @param keyName - can point to 'ref' or 'error' key, default is 'value'
  * @returns {*}
  */
-export const updateInputObject = (event, stateClone, value, keyName) => {
-    let targetName = event.target.name;
+export const updateInputObject = (event, stateClone, keyName) => {
+    let value = event.target.value,
+        targetName = event.target.name;
+
     keyName = keyName || "value";
 
-    stateClone.input[targetName][keyName] = value;
+    stateClone.inputs[targetName][keyName] = value;
 
     return stateClone;
 };
@@ -54,4 +55,4 @@ export const createPayload = (stateClone, inputKey) => {
     return payload;
 };
 
-export default getInputObject;
+export default inputObject;
