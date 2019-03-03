@@ -44,12 +44,12 @@ export const updateInputObject = (event, stateClone, keyName) => {
  * @param inputKey - defaults to 'input' but can be used
  *      for other state objects with same data structure {value: value, error: bool, ref: React.ref()}
  */
-export const createPayload = (stateClone, inputKey) => {
+export const createPayload = (state, inputKey) => {
     inputKey = inputKey || 'inputs';
 
     let payload = {};
-    for (let keyName in stateClone[inputKey]) {
-        payload[keyName] = stateClone[inputKey][keyName].value;
+    for (let keyName in state[inputKey]) {
+        payload[keyName] = state[inputKey][keyName].value;
     }
 
     return payload;
