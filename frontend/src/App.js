@@ -25,6 +25,13 @@ class App extends Component {
         })
     }
 
+    /**
+     * updates state.apiResponseMessages
+     *
+     * @param messages
+     *   passing in empty array clears the messages and the type
+     * @param type
+     */
     updateMessages(messages, type) {
         let apiResponseMessages = {...this.state.apiResponseMessages},
             messagesArray = [];
@@ -33,6 +40,10 @@ class App extends Component {
             for (let index in messages) {
                 messagesArray.push(messages[index].message);
             }
+        }
+        else {
+            // clear the type if 0 messages
+            type = "";
         }
 
         apiResponseMessages.type = type;

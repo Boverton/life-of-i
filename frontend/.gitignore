@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+# backend dependencies
+/backend/node_modules/
+
 # testing
 /coverage
 
@@ -18,10 +21,14 @@
 .env.test.local
 .env.production.local
 
+backend/.bash_profile
+Mockups/
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+.idea/*
 .DS_Store
 .idea/The life of i.iml
 .idea/encodings.xml
