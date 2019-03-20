@@ -12,6 +12,13 @@ const pool = mysql.createPool({
     }
 });
 
+/**
+ * Insert into the DB
+ *
+ * @param tableName String
+ * @param data {object} columnName: valueToInsert
+ * @returns {Promise<Object>}
+ */
 function insert(tableName, data) {
     let columnArray = [], placeholderArray = [],
         valuesArray = [],
@@ -35,7 +42,6 @@ function insert(tableName, data) {
     query += " values (" + placeholderString + ")";
 
     query = mysql.format(query, valuesArray);
-    console.log("The query", query);
 
     return new Promise( resolve => {
         pool.query(query, (error, results, field) => {
@@ -45,6 +51,14 @@ function insert(tableName, data) {
     })
 }
 
+/**
+ * Find a record from DB
+ *
+ * @param tableName String
+ * @param where Object {columnName: valueItEquals}
+ * @param selectFields Array [columnToReturn]
+ * @returns {Promise<Array>}
+ */
 function findOne(tableName, where, selectFields) {
     let valuesArray = [], whereClauses = [];
 
@@ -73,11 +87,17 @@ function findOne(tableName, where, selectFields) {
     })
 }
 
+/**
+ * Checks if a value already exists in the table and column
+ * @param tableName string
+ * @param where Object {columnName: valueItEquals}
+ * @param selectFields selectFields Array [columnToReturn]
+ * @returns {Promise<Boolean>}
+ */
 function isUnique(tableName, where, selectFields) {
     return new Promise( resolve => {
         (async () => {
             let results = await findOne(tableName, where, selectFields);
-            console.log("The results", results);
 
             return resolve(results.length === 0);
         })();
