@@ -1,12 +1,15 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
+frontend/node_modules/
 /node_modules
 /.pnp
 .pnp.js
 
-# backend dependencies
-/backend/node_modules/
+# backend
+backend/node_modules/
+backend/node_modules/*
+backend/.bash_profile
 
 # testing
 /coverage
@@ -20,15 +23,13 @@
 .env.development.local
 .env.test.local
 .env.production.local
-
-backend/.bash_profile
-Mockups/
+frontend/src/.env
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-.idea/*
+.idea/
 .DS_Store
 .idea/The life of i.iml
 .idea/encodings.xml
@@ -38,11 +39,3 @@ yarn-error.log*
 .idea/workspace.xml
 Mockups/
 
-../.DS_Store
-../.idea/The life of i.iml
-../.idea/encodings.xml
-../.idea/jsLibraryMappings.xml
-../.idea/misc.xml
-../.idea/modules.xml
-../.idea/workspace.xml
-../Mockups/
