@@ -12,7 +12,7 @@ class App extends Component {
 
         this.state = {
             apiResponseMessages: {
-                type: "",
+                type: "error",
                 messages: [],
             }
         }
@@ -33,7 +33,7 @@ class App extends Component {
      *   passing in empty array clears the messages and the type
      * @param type
      */
-    updateMessages(messages, type) {
+    updateMessages = (messages, type) => {
         let apiResponseMessages = {...this.state.apiResponseMessages},
             messagesArray = [];
 
@@ -42,16 +42,12 @@ class App extends Component {
                 messagesArray.push(messages[index].message);
             }
         }
-        else {
-            // clear the type if 0 messages
-            type = "";
-        }
 
         apiResponseMessages.type = type;
         apiResponseMessages.messages = messagesArray;
 
         this.setState({apiResponseMessages: apiResponseMessages});
-    }
+    };
 
     render() {
         return (
@@ -62,7 +58,10 @@ class App extends Component {
                     <Route path="/" render={() => <h1>Home</h1>}/>
                   </Switch>
                 </Router>
-                <MessageBlock apiResponseMessages={this.state.apiResponseMessages}/>
+                <MessageBlock
+                    apiResponseMessages={this.state.apiResponseMessages}
+                    updateMessages={this.updateMessages}
+                />
             </div>
         );
   }
