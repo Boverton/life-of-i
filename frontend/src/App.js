@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Register from './components/auth/Register';
 import axios from 'axios';
+import MessageBlock from "./components/common/MessageBlock";
 
 
 class App extends Component {
@@ -54,12 +55,15 @@ class App extends Component {
 
     render() {
         return (
-            <Router>
-              <Switch>
-                <Route path="/register" component={Register} />
-                <Route path="/" render={() => <h1>Home</h1>}/>
-              </Switch>
-            </Router>
+            <div>
+                <Router>
+                  <Switch>
+                    <Route path="/register" component={Register} />
+                    <Route path="/" render={() => <h1>Home</h1>}/>
+                  </Switch>
+                </Router>
+                <MessageBlock apiResponseMessages={this.state.apiResponseMessages}/>
+            </div>
         );
   }
 }
