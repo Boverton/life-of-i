@@ -2,21 +2,61 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../../styles/MessageBlock.css';
 
-
 export default class MessageBlock extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            show: false,
+        };
+
+        // keep track of the timer so we can clear it
+        this.timer = undefined;
     }
 
-    componentDidMount() {
-        // set timeout
+    componentWillUpdate(nextProps, nextState, nextContext) {
+        let before = JSON.stringify(this.props),
+            next = JSON.stringify(nextProps),
+            show = true;
+
+        // props the same?  just update
+        if (before === next) {
+            return;
+        }
+
+        // hide the message block if there are none to display
+        if (nextProps.apiResponseMessages.messages.length === 0) {
+            show = false;
+        }
+
+        this.setState({show: show});
+
+        clearInterval(this.timer);
+        this.startTimer();
     }
+
+    /**
+     * Start the timer for visibility of message block
+     */
+    startTimer = ()=> {
+        this.timer = setTimeout(() =>{
+            this.close()}, 10000);
+    };
+
+    /**
+     * Close the message block and clear the apiResponseMessages in App.js
+     */
+    close = () =>  {
+        this.setState({show: false});
+        clearInterval(this.timer);
+        this.props.updateMessages([], this.props.apiResponseMessages.type);
+    };
 
     render() {
         let apiResponseMessages = this.props.apiResponseMessages,
             type = apiResponseMessages.type,
-            apiMessages = apiResponseMessages.messages;
+            apiMessages = apiResponseMessages.messages,
+            show = this.state.show;
 
         const messages = apiMessages.map( (message, key) => {
             return (
@@ -26,9 +66,8 @@ export default class MessageBlock extends Component {
             )
         });
 
-
         return (
-            <div className={"message-block " + type }>
+            <div className={(show ? "show " : "") + "message-block " + type}>
                 { messages }
             </div>
         )
@@ -36,5 +75,6 @@ export default class MessageBlock extends Component {
 }
 
 MessageBlock.propTypes = {
-  apiResponseMessages: PropTypes.object.isRequired,
+    apiResponseMessages: PropTypes.object.isRequired,
+    updateMessages: PropTypes.func.isRequired,
 };

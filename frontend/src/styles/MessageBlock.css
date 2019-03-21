@@ -7,7 +7,6 @@
     left: 0;
     right: 0;
     margin: auto;
-    /*display: none;*/
     flex-direction: column;
     border-radius: 4px;
     box-shadow: 0 0 6px 0 rgba(128, 128, 128, 0.65);
@@ -15,16 +14,17 @@
 }
 
 .message-block.error {
-    bottom: 50px;
     background-color: #d84444;
     display: inline-flex;
-    transition: bottom 400ms;
 }
 
 .message-block.success {
-    bottom: 50px;
     background-color: #3eb33e;
     display: inline-flex;
+}
+
+.message-block.show {
+    bottom: 50px;
     transition: bottom 400ms;
 }
 
@@ -52,12 +52,7 @@
         transition: bottom 400ms;
     }
 
-    .message-block.error {
-        bottom: 0;
-        transition: bottom 400ms;
-    }
-
-    .message-block.success {
+    .message-block.show {
         bottom: 0;
         transition: bottom 400ms;
     }
