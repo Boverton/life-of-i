@@ -40,7 +40,7 @@ export const updateInputObject = (event, stateClone, keyName) => {
 
 /**
  * iterate over the inputkey.inputobject.value into a seperate object
- * @param stateClone
+ * @param state
  * @param inputKey - defaults to 'input' but can be used
  *      for other state objects with same data structure {value: value, error: bool, ref: React.ref()}
  */
@@ -53,6 +53,24 @@ export const createPayload = (state, inputKey) => {
     }
 
     return payload;
+};
+
+export const updateInputWithError = (response, stateClone) => {
+    let errors = response.data.errors;
+
+    for (let errorIndex in errors) {
+        let field = errors[errorIndex].field;
+        stateClone.inputs[field].error = true;
+    }
+
+    return stateClone;
+};
+
+export const clearErrorOnBlur = (event, stateClone) => {
+    let targetName = event.target.name;
+
+    stateClone.inputs[targetName].error = false;
+    return stateClone;
 };
 
 export default inputObject;
