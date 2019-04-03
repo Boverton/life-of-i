@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Register from './components/auth/Register';
 import axios from 'axios';
 import MessageBlock from "./components/common/MessageBlock";
+import Login from "./components/auth/Login";
 
 
 class App extends Component {
@@ -57,7 +58,8 @@ class App extends Component {
                 <Router>
                   <Switch>
                     <Route path="/register" component={Register} />
-                    <Route path="/" render={() => <h1>Home</h1>}/>
+                    <Route path="/" component={Login}/>
+                    {/*<Route path="/" render={() => <h1>Home</h1>}/>*/}
                   </Switch>
                 </Router>
                 <MessageBlock
