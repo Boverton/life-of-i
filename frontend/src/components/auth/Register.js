@@ -24,10 +24,12 @@ export default class Register extends Component {
         this.source = axios.CancelToken.source();
     }
 
+    componentWillUnmount() {
+        this.source.cancel();
+    }
+
     render() {
-        let username = this.state.inputs.username.value,
-            email = this.state.inputs.email.value,
-            password = this.state.inputs.password.value;
+        let {username, email, password} = this.state.inputs;
 
         return (
             <div className="auth-view">
@@ -38,7 +40,7 @@ export default class Register extends Component {
                             id="username"
                             type="text"
                             name="username"
-                            value={username}
+                            value={username.value}
                             onChange={(event) => this.setState(updateInputObject(event, {...this.state}))}
                             onBlur={(event) => this.setState(clearErrorOnBlur(event, {...this.state}))}
                             className={ username.error ? "input-error" : ""}
@@ -48,7 +50,7 @@ export default class Register extends Component {
                             id="email"
                             type="text"
                             name="email"
-                            value={email}
+                            value={email.value}
                             onChange={(event) => this.setState(updateInputObject(event, {...this.state}))}
                             onBlur={(event) => this.setState(clearErrorOnBlur(event, {...this.state}))}
                             className={ email.error ? "input-error" : ""}
@@ -58,7 +60,7 @@ export default class Register extends Component {
                             id="password"
                             type="password"
                             name="password"
-                            value={password}
+                            value={password.value}
                             onChange={(event) => this.setState(updateInputObject(event, {...this.state}))}
                             onBlur={(event) => this.setState(clearErrorOnBlur(event, {...this.state}))}
                             className={ password.error ? "input-error" : ""}
