@@ -28,6 +28,21 @@ export default class Register extends Component {
         this.source.cancel();
     }
 
+    /**
+     * Post the registration fields to register
+     * @param event
+     */
+    postToRegister = (event) => {
+        event.preventDefault();
+        let payload = createPayload(this.state);
+        post('register', payload, this.source)
+            .then( response => {
+                if (response.data.errors) {
+                    this.setState(updateInputWithError(response, {...this.state}));
+                }
+            });
+    };
+
     render() {
         let {username, email, password} = this.state.inputs;
 
@@ -82,16 +97,5 @@ export default class Register extends Component {
                 </form>
             </div>
         )
-    }
-
-    postToRegister = (event) => {
-        event.preventDefault();
-        let payload = createPayload(this.state);
-        post('register', payload, this.source)
-            .then( response => {
-                if (response.data.errors) {
-                    this.setState(updateInputWithError(response, {...this.state}));
-                }
-            });
     }
 }
