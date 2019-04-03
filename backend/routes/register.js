@@ -11,8 +11,9 @@ router.post('/', (req, res) => {
       let body = req.body, errors;
 
       try {
-          //trim the whitespace from username before validation
+          //trim the whitespace from username and password
           body.username = body.username.trim();
+          body.password = body.password.trim();
 
           errors = await validate(body, res);
 
