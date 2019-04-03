@@ -11,11 +11,10 @@ router.post('/register', (req, res) => {
       let body = req.body, errors;
 
       try {
-          //trim the whitespace from username and password
-          body.username = body.username.trim();
-          body.password = body.password.trim();
+          //trim the whitespace from fields
+          trimBodyValues(body);
 
-          errors = await validate(body, res);
+          errors = await validate(body);
 
           // Any errors returned from validation = 400 else 200
           if (errors.length > 0) {
@@ -171,32 +170,63 @@ router.post('/register', (req, res) => {
    }
 });
 
-
 /**
- * Validates all fields in request have a value
- * @param body
- * @param errors
- * @returns {Promise<Array>}
+ * auth/register route
  */
-function requireAll(body, errors) {
-   return new Promise(resolve => {
-      for(let field in body) {
-         if (body.hasOwnProperty(field)) {
-            if (!body[field]) {
-               errors.push({
-                  field: field,
-                  message: capitalizeFirstLetter(field).replace(/_/," ") + " is required",
-               })
-            }
+router.post('/register', (req, res) => {
+   (async () => {
+      let body = req.body, errors;
+
+      try {
+         //trim the whitespace from username and password
+         body.email = body.email.trim();
+         body.password = body.password.trim();
+
+         errors = await validate(body, res);
+
+         // Any errors returned from validation = 400 else 200
+         if (errors.length > 0) {
+            res.status(400).send({errors: errors});
+         } else {
+            body.password = await hashPassword(body.password);
+
+            dal.insert("users", body);
+            return res.status(200).send({good: true})
          }
+      } catch (e) {
+         // general errors inserting or validating
+         return res.status(500).send(e.message);
       }
-      return resolve(errors);
-   })
-}
+   })()
+});
+
 
 /*****
  * General funcs
  *****/
+
+   /**
+    * Validates all fields in request have a value
+    * @param body
+    * @param errors
+    * @returns {Promise<Array>}
+    */
+   function requireAll(body, errors) {
+      return new Promise(resolve => {
+         for(let field in body) {
+            if (body.hasOwnProperty(field)) {
+               if (!body[field]) {
+                  errors.push({
+                     field: field,
+                     message: capitalizeFirstLetter(field).replace(/_/," ") + " is required",
+                  })
+               }
+            }
+         }
+         return resolve(errors);
+      })
+   }
+
 
 /**
  * Capitalizes first letter of a string
@@ -206,6 +236,18 @@ function requireAll(body, errors) {
  */
 function capitalizeFirstLetter(string) {
    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+/**
+ * trim white space off any values sent back
+ * @param body
+ */
+function trimBodyValues(body) {
+   for(let index in body) {
+      let value = body[index];
+      // trim white space and set it to new value
+      body[index] = value.trim();
+   }
 }
 
 
