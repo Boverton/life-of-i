@@ -35,6 +35,12 @@ export default class MessageBlock extends Component {
         this.startTimer();
     }
 
+    componentWillUnmount() {
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
+    }
+
     /**
      * Start the timer for visibility of message block
      */
