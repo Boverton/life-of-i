@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { post } from '../../lib/requestHelper';
-import { updateInputObject, createPayload, inputObject } from '../../lib/formHelper';
+import {
+    updateInputObject, createPayload,
+    inputObject, updateInputWithError,
+    clearErrorOnBlur } from '../../lib/formHelper';
 import '../../styles/form.css';
 
 
@@ -37,6 +40,8 @@ export default class Register extends Component {
                             name="username"
                             value={username}
                             onChange={(event) => this.setState(updateInputObject(event, {...this.state}))}
+                            onBlur={(event) => this.setState(clearErrorOnBlur(event, {...this.state}))}
+                            className={ username.error ? "input-error" : ""}
                         />
                         <input
                             placeholder="email"
@@ -45,7 +50,8 @@ export default class Register extends Component {
                             name="email"
                             value={email}
                             onChange={(event) => this.setState(updateInputObject(event, {...this.state}))}
-
+                            onBlur={(event) => this.setState(clearErrorOnBlur(event, {...this.state}))}
+                            className={ email.error ? "input-error" : ""}
                         />
                         <input
                             placeholder="password"
@@ -54,6 +60,8 @@ export default class Register extends Component {
                             name="password"
                             value={password}
                             onChange={(event) => this.setState(updateInputObject(event, {...this.state}))}
+                            onBlur={(event) => this.setState(clearErrorOnBlur(event, {...this.state}))}
+                            className={ password.error ? "input-error" : ""}
                         />
                     </div>
                     <div className="buttons-container">
@@ -77,6 +85,11 @@ export default class Register extends Component {
     postToRegister = (event) => {
         event.preventDefault();
         let payload = createPayload(this.state);
-        post('register', payload, this.source);
+        post('register', payload, this.source)
+            .then( response => {
+                if (response.data.errors) {
+                    this.setState(updateInputWithError(response, {...this.state}));
+                }
+            });
     }
 }

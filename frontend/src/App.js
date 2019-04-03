@@ -20,9 +20,11 @@ class App extends Component {
 
     componentDidMount() {
         axios.interceptors.response.use(response => {
-            let type = response.status === 400 ? "error" : "success";
-            this.updateMessages(response.data.errors, type);
-            return response;
+            if (response.status === 400) {
+                let type = "error";
+                this.updateMessages(response.data.errors, type);
+                return response;
+            }
         })
     }
 

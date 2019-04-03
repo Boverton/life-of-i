@@ -68,6 +68,10 @@
     text-align: center;
 }
 
+.input-error {
+    background-color: rgba(255, 0, 0, 0.69);;
+}
+
 button {
     text-transform: uppercase;
     font-weight: 700;
