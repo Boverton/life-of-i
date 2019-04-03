@@ -32,7 +32,7 @@ export default class Login extends Component {
     postToLogin = (event) => {
         event.preventDefault();
         let payload = createPayload(this.state);
-        post('login', payload, this.source)
+        post('auth/login', payload, this.source)
             .then( response => {
                 if (response.data.errors) {
                     this.setState(updateInputWithError(response, {...this.state}));

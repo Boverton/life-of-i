@@ -12,6 +12,6 @@ app.get('/', (req, res) => res.send('Hello World!'));
 app.get('/are-we-up', (req, res) => res.sendStatus(200));
 
 /** routes **/
-const registerRoute = require('./routes/register');
+const authRoute = require('./routes/auth');
 
-app.use('/register', registerRoute);
+app.use('/auth', authRoute);

@@ -35,7 +35,7 @@ export default class Register extends Component {
     postToRegister = (event) => {
         event.preventDefault();
         let payload = createPayload(this.state);
-        post('register', payload, this.source)
+        post('auth/register', payload, this.source)
             .then( response => {
                 if (response.data.errors) {
                     this.setState(updateInputWithError(response, {...this.state}));

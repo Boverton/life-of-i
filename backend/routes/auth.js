@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 /**
  * register/ route
  */
-router.post('/', (req, res) => {
+router.post('/register', (req, res) => {
    (async () => {
       let body = req.body, errors;
 
