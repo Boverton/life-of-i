@@ -8,6 +8,7 @@ export default class MessageBlock extends Component {
         super(props);
 
 	console.log("Testing this out");
+	console.log("adding another test");
 
         this.state = {
             show: false,
