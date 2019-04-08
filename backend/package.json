@@ -1,0 +1,16 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend for lifeofi",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Brandon Overton",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.4",
+    "express": "^4.16.4",
+    "mysql": "^2.16.0"
+  }
+}

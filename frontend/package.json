@@ -1,0 +1,38 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "faker": "^4.1.0",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "jest",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "jest-puppeteer": "^3.9.0",
+    "puppeteer": "^1.12.2"
+  },
+  "jest": {
+    "preset": "jest-puppeteer"
+  },
+  "proxy": "http://127.0.0.1:3001"
+}

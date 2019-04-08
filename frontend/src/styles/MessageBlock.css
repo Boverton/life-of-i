@@ -1,0 +1,59 @@
+.message-block {
+    width: 50%;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: -20%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    flex-direction: column;
+    border-radius: 4px;
+    box-shadow: 0 0 6px 0 rgba(128, 128, 128, 0.65);
+    transition: bottom 400ms;
+}
+
+.message-block.error {
+    background-color: #d84444;
+    display: inline-flex;
+}
+
+.message-block.success {
+    background-color: #3eb33e;
+    display: inline-flex;
+}
+
+.message-block.show {
+    bottom: 50px;
+    transition: bottom 400ms;
+}
+
+.message-block > span {
+    width: 100%;
+    margin: 10px;
+    color: white;
+    font-size: 1.2rem;
+    margin: 2px;
+    font-weight: 300;
+}
+
+@media (max-width : 700px) {
+    .message-block {
+        width: 75%;
+    }
+}
+
+@media (max-width : 375px) {
+    .message-block {
+        width: 100%;
+        border-radius: 0;
+        bottom: -20%;
+        box-shadow: none;
+        transition: bottom 400ms;
+    }
+
+    .message-block.show {
+        bottom: 0;
+        transition: bottom 400ms;
+    }
+}
