@@ -173,31 +173,37 @@ router.post('/register', (req, res) => {
 /**
  * auth/register route
  */
-router.post('/register', (req, res) => {
-   (async () => {
-      let body = req.body, errors;
+router.post('/login', (req, res) => {
+    (async () => {
+        let body = req.body, errors;
 
-      try {
-         //trim the whitespace from username and password
-         body.email = body.email.trim();
-         body.password = body.password.trim();
+        try {
+            trimBodyValues(body);
 
-         errors = await validate(body, res);
+            body.email = body.email.trim();
+            body.password = body.password.trim();
 
-         // Any errors returned from validation = 400 else 200
-         if (errors.length > 0) {
-            res.status(400).send({errors: errors});
-         } else {
-            body.password = await hashPassword(body.password);
+            errors = await validate(body);
 
-            dal.insert("users", body);
-            return res.status(200).send({good: true})
-         }
-      } catch (e) {
-         // general errors inserting or validating
-         return res.status(500).send(e.message);
-      }
-   })()
+            // Any errors returned from validation = 400 else 200
+            if (errors.length > 0) {
+                res.status(400).send({errors: errors});
+            } else {
+                // body.password = await hashPassword(body.password);
+
+                // dal.insert("users", body);
+                return res.status(200).send({good: true})
+            }
+        } catch (e) {
+            // general errors inserting or validating
+            return res.status(500).send(e.message);
+        }
+    })();
+
+    function validate(body) {
+    
+    }
+
 });
 
 

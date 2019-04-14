@@ -50,8 +50,6 @@ describe("Error handling", () => {
                 // check message with field is what we expect (i.e. username is required)
                 let errorRegex = new RegExp(field + ".*required","i");
                 expect(message.match(errorRegex)).toBeTruthy();
-
-
             }
 
             expect(response.status()).toBe(400);
