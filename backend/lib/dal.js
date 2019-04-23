@@ -57,7 +57,7 @@ function insert(tableName, data) {
  * @param tableName String
  * @param where Object {columnName: valueItEquals}
  * @param selectFields Array [columnToReturn]
- * @returns {Promise<Array>}
+ * @returns {Promise<Object>}
  */
 function findOne(tableName, where, selectFields) {
     let valuesArray = [], whereClauses = [];
@@ -78,11 +78,11 @@ function findOne(tableName, where, selectFields) {
     query += whereClauses.join(" and ");
 
     query = mysql.format(query, valuesArray);
-
+    
     return new Promise( resolve => {
         pool.query(query, (error, results, field) => {
             if (error) console.log("There was an error", error);
-            return resolve(results || []);
+            return resolve(results[0] || {});
         });
     })
 }
