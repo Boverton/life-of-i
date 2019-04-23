@@ -3,7 +3,39 @@ const app = express();
 const port = 3001;
 
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+
 app.use(bodyParser.json()); // for parsing application/json
+
+/**
+ * routes that don't require authentication
+ **/
+const ignoreAuthRoutes = ['/auth/login', '/auth/register'];
+
+/**
+ * Validate token middleware test
+ **/
+const verifyToken = (req, res, next) => {
+  if (!ignoreAuthRoutes.includes(req.path)) {
+    let token = req.cookies.token ? req.cookies.token : "";
+    if (!token) {
+      res.status(401).send(401, "Forbidden");
+      return;
+    }
+    let decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!decoded || !decoded.userId) {
+      res.status(401).send("Forbidden");
+      return;
+    }
+
+    req.app.locals.userId = decoded.userId;
+    req.app.locals.authenticated = true;
+  }
+  next();
+};
+
+app.use(verifyToken);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
