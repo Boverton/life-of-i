@@ -3,6 +3,14 @@ const router = express.Router();
 const dal = require('../lib/dal');
 const bcrypt = require('bcrypt');
 
+// require jwt token
+const jwt = require('jsonwebtoken');
+const signingOptions = {
+  issuer: process.env.JWT_ISSUER,
+  audience: process.env.JWT_AUDIENCE,
+  expiresIn: "120h",
+};
+
 /**
  * auth/register route
  */
@@ -59,7 +67,6 @@ router.post('/register', (req, res) => {
          })();
       });
    }
-
 
    /**
     * Validates the username is unique and doesn't exist in users.username
@@ -174,65 +181,91 @@ router.post('/register', (req, res) => {
  * auth/register route
  */
 router.post('/login', (req, res) => {
-    (async () => {
-        let body = req.body, errors;
+  (async () => {
+    let body = req.body, errors = [];
 
-        try {
-            trimBodyValues(body);
+    // remove white space from body
+    trimBodyValues(body);
+    // validate all fields have a value
+    await requireAll(body, errors);
 
-            body.email = body.email.trim();
-            body.password = body.password.trim();
-
-            errors = await validate(body);
-
-            // Any errors returned from validation = 400 else 200
-            if (errors.length > 0) {
-                res.status(400).send({errors: errors});
-            } else {
-                // body.password = await hashPassword(body.password);
-
-                // dal.insert("users", body);
-                return res.status(200).send({good: true})
-            }
-        } catch (e) {
-            // general errors inserting or validating
-            return res.status(500).send(e.message);
-        }
-    })();
-
-    function validate(body) {
-    
+    // Any errors returned from validation = 400 else 200
+    if (errors.length > 0) {
+      // return early if fields are empty
+      return res.status(400).send({errors: errors});
     }
 
+    // get the user row
+    let userRow = await dal.findOne('users', {email: body.email});
+    // validate user
+    let valid = await authentication(body.email, body.password, userRow);
+
+    if (!valid) {
+      // invalid credentials populate the errors
+      errors.push({
+        field: "password",
+        message: "Invalid Credentials."
+      }, {
+        field: "email",
+        message: ""
+      });
+
+      return res.status(400).send({errors: errors});
+    }
+
+    jwt.sign({userId: userRow.id}, process.env.JWT_SECRET, signingOptions, (err, token) => {
+      res.cookie('token', token, {maxAge: 1000 * 60 * 15, httpOnly: true});
+      res.status(200).send({id: userRow.id, username: userRow.username});
+    });
+  })();
 });
 
+/**
+ * Authenticate the user using bcrypt
+ * @param email String
+ * @param password String
+ * @param userRow Object
+ * @returns {Promise<Boolean>}
+ */
+function authentication(email, password, userRow) {
+  return new Promise(resolve => {
+    (async () => {
+      let valid = false;
+      console.log("userRow", userRow);
+      
+      if (userRow.password) {
+        valid = await bcrypt.compare(password, userRow.password);
+      }
+      return resolve(valid);
+    })();
+  })
+}
 
 /*****
  * General funcs
  *****/
 
-   /**
-    * Validates all fields in request have a value
-    * @param body
-    * @param errors
-    * @returns {Promise<Array>}
-    */
-   function requireAll(body, errors) {
-      return new Promise(resolve => {
-         for(let field in body) {
-            if (body.hasOwnProperty(field)) {
-               if (!body[field]) {
-                  errors.push({
-                     field: field,
-                     message: capitalizeFirstLetter(field).replace(/_/," ") + " is required",
-                  })
-               }
-            }
-         }
-         return resolve(errors);
-      })
-   }
-
+/**
+* Validates all fields in request have a value
+* @param body
+* @param errors
+* @returns {Promise<Array>}
+*/
+function requireAll(body, errors) {
+  return new Promise(resolve => {
+     for(let field in body) {
+        if (body.hasOwnProperty(field)) {
+           if (!body[field]) {
+              errors.push({
+                 field: field,
+                 message: capitalizeFirstLetter(field).replace(/_/," ") + " is required",
+              })
+           }
+        }
+     }
+     return resolve(errors);
+  })
+}
 
 /**
  * Capitalizes first letter of a string
@@ -255,6 +288,5 @@ function trimBodyValues(body) {
       body[index] = value.trim();
    }
 }
-
 
 module.exports = router;
